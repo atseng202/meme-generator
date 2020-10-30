@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="reset.css">
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <title>Document</title>
+</head>
+<body>
+    <div class="header-container">
+        <h1 class="meme-title">Come for the Memes!</h1>
+        <p class="subheader">Submit some memes with this form!</p>
+        <form action="#" id="meme-form">
+            <div>
+                <label for="image_link">Meme Image URL</label>
+                <input type="text" id="image_link" name="url" placeholder="Enter a meme URL image here!">
+            </div>
+            <div>
+                <label for="top_text">Text On Top</label>
+                <input type="text" id="top_text" name="top" placeholder="Enter the top half of the meme">
+            </div>
+            <div>
+                <label for="bottom_text">Text On Bottom</label>
+                <input type="text" id="bottom_text" name="bottom" placeholder="Enter the bottom half of the meme">
+            </div>
+            <div id="submit-button">
+                <input type="submit" value="Submit" onclick="addMeme">
+            </div>
+        </form>
+        
+        <hr>
+    </div>
+
+
+    <ul id="memes_list">
+
+    </ul>
+
+
+    <script>
+        // you can put your JavaScript in here, or include an external file.
+        function addMeme(event) {
+            event.preventDefault();
+
+            let image_link = document.getElementById("image_link").value;
+            let top_text = document.getElementById("top_text").value;
+            let bottom_text = document.getElementById("bottom_text").value;
+
+            if (image_link === "" || top_text === "" || bottom_text === "") {
+                return;
+            } 
+            
+            let newImgDiv = document.createElement("div");
+            newImgDiv.className="img_container"
+
+            let img = document.createElement("img");
+            img.src = image_link;
+
+            let topTextDiv = document.createElement("div");
+            topTextDiv.className = "top_text_div";
+            topTextDiv.innerText = top_text;
+
+            let bottomTextDiv = document.createElement("div");
+            bottomTextDiv.className = "bottom_text_div";
+            bottomTextDiv.innerText = bottom_text;
+
+            // adding a delete button that will delete this meme onClick
+            let deleteButton = document.createElement("button");
+            deleteButton.className = "meme_delete_button";
+            deleteButton.innerText = "Delete";
+
+            deleteButton.addEventListener('click', deleteMeme);
+
+            let buttonAndImgContainer = document.createElement("div");
+            buttonAndImgContainer.className = "buttonAndImgContainer";
+
+            // Now add these all together
+            newImgDiv.appendChild(img);
+            newImgDiv.appendChild(topTextDiv);
+            newImgDiv.appendChild(bottomTextDiv);
+
+            buttonAndImgContainer.appendChild(newImgDiv);
+            buttonAndImgContainer.appendChild(deleteButton);
+
+            // add into our DOM Tree
+            let memesList = document.getElementById("memes_list");
+            // memesList.appendChild(newImgDiv);
+            memesList.appendChild(buttonAndImgContainer)
+
+            //finally clear the inputs
+            let inputs = document.querySelectorAll("input[type='text']");
+            for (let input of inputs) {
+                input.value = "";
+            }
+        }
+
+        function deleteMeme(e) {
+            console.log(e);
+            e.preventDefault();
+            // deletes the div container from the page
+            let deleteButton = e.target;
+            // remove the event listener too 
+            deleteButton.removeEventListener('click', deleteMeme);
+
+            let imgDivContainer = deleteButton.parentElement;
+            document.getElementById("memes_list").removeChild(imgDivContainer);
+
+        };
+
+        let form = document.getElementById("meme-form");
+        form.addEventListener('submit', addMeme);
+    </script>
+</body>
+</html>
